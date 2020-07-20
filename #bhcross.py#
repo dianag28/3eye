@@ -1,0 +1,40 @@
+# my task is to create an image of a galaxy with a cross showing where the black hole is
+
+#first thing i need to do is import packages
+import pynbody
+import matplotlib.pylab as plt
+import numpy as np
+import BH_functions.py as BHF
+
+#import snapshot
+s = pynbody.load ("/media/jillian/h148/h148.cosmo50PLK.3072g3HbwK1BH.000275/h148.cosmo50PLK.3072g3HbwK1BH.000275")
+
+#convert the units
+s.physical_units()
+
+#function to find bh
+
+def findBH(s):
+    BHfilter = pynbody.filt.LowPass('tform', 0.0)
+    BH = s.stars[BHfilter]
+    return BH
+
+#function to find halos that hosts bh
+
+BH = findBH(s)
+print('The number of black holes in this snapshot: ', len(BH))
+def findBHhalos(s):
+    BH = findBH(s)
+    BHhalos = BH['amiga.grp']
+    return BHhalos
+BHhalos = findBHhalos(s)
+currenthalo= np.argsort(BHhalos)
+
+#create a loop to find bh
+
+for i in currenthalo:
+    currenthalo= BHhalos[i]
+    bh = BH[i]
+    print ('currenthalo: ',currenthalo)
+    print ('bh ,',len(bh))
+
